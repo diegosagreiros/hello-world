@@ -142,40 +142,48 @@ button:hover {
 
 let intentos = 0;
 let etapaAmor = 0;
+let aceptado = false;
 
 /* FRASES INSISTIR */
 const frasesNo = [
   "¿Segura? 🐟",
-  "Este ocuno puede hacerte muy feliz 🌊",
+  "Este océano puede hacerte muy feliz 🌊",
   "Si eres mi Valentín podría algún día entrar con mi traje de domador de leones 🦁",
-"ademas estamos a nada de estar bien abrazados en tu depa",
   "Los pececitos no se separan 💙",
-  "Nuestros hilos rojos no se equivocan",
+  "Nuestros hilos rojos no se equivocan 🧵❤️",
   "Sabes que es SÍ 😌"
 ];
 
 /* FRASES DESPUÉS DE ACEPTAR */
 const frasesSi = [
-  "La distancia y el tiempo no son impedimentos para no cumplir nuestras promesas 💫",
+  "La distancia y el tiempo no son impedimentos para cumplir nuestras promesas 💫",
   "No te arrepentirás 💙",
   "Eres mi constelación, te amo ✨",
-  "Siempre fuimos dos pececitos nadando hacia el mismo destino 🐟🐟", "que saque el aire de mis ojos, que abrace al miedo con tus sueños",
+  "Siempre fuimos dos pececitos nadando hacia el mismo destino 🐟🐟",
   "Ok… ahora que aceptaste quiero ver tu reacción 👀💙"
 ];
 
 function insistir() {
+  if (aceptado) return; // bloquea si ya aceptó
+
   intentos++;
   document.getElementById("mensaje").innerHTML =
     frasesNo[Math.min(intentos - 1, frasesNo.length - 1)];
 }
 
 function aceptar() {
-  const botonSi = document.querySelector("button");
-  botonSi.innerHTML = "SEGUIR 💙";
-  botonSi.onclick = continuarAmor;
+  if (aceptado) return;
+
+  aceptado = true;
+
+  // Ocultar botón No
+  const botones = document.getElementById("botones");
+  botones.innerHTML = '<button id="seguirBtn">SEGUIR 💙</button>';
 
   document.getElementById("mensaje").innerHTML =
     "💙 MISIÓN COMPLETADA 💙<br><br>Pero espera…";
+
+  document.getElementById("seguirBtn").onclick = continuarAmor;
 }
 
 function continuarAmor() {
@@ -183,7 +191,26 @@ function continuarAmor() {
     document.getElementById("mensaje").innerHTML =
       frasesSi[etapaAmor];
     etapaAmor++;
+  } else {
+    finalAnimacion();
   }
+}
+
+function finalAnimacion() {
+
+  // Desactivar botón
+  const btn = document.getElementById("seguirBtn");
+  btn.disabled = true;
+  btn.innerHTML = "💙";
+
+  // Animación final: pantalla se vuelve rosada suave
+  document.body.style.transition = "background 4s ease-in-out";
+  document.body.style.background =
+    "linear-gradient(to bottom, #ff99dd, #ff66cc, #ff99dd)";
+
+  document.getElementById("mensaje").innerHTML =
+    "Nuestros hilos rojos no se equivocan 🧵❤️<br><br>" +
+    "Siempre fuimos dos pececitos destinados a encontrarse 🐟🐟";
 }
 
 /* Burbujas */
